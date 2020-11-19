@@ -1,7 +1,15 @@
+import 'package:assignment/TodoList.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 
+import 'SecondView.dart';
+import './model.dart';
+
+//import 'TodoListTile.dart';
+
 void main() {
-  runApp(MyApp());
+  var state = MyState();
+  runApp(ChangeNotifierProvider(create: (context) => state, child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,11 +21,20 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  List<String> choices = ['All', 'Done', 'Undone'];
+  String filterValue = 'All';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _toDoList(),
+      body: Consumer<MyState>(
+          builder: (context, state, child) =>
+              TodoList(state.filteredList(filterValue))),
       floatingActionButton: _addButton(context),
       appBar: _appBar(),
     );
@@ -26,44 +43,23 @@ class Home extends StatelessWidget {
   Widget _appBar() {
     return AppBar(
       backgroundColor: Colors.grey[900],
-      title: Text("To-do list"),
+      title: Text("TIG 169 TODO"),
       centerTitle: true,
-      actions: [
-        IconButton(
-            icon: Icon(
-              Icons.more_vert,
-              color: Colors.white,
-            ),
-            onPressed: null)
-      ],
-    );
-  }
-
-  Widget _toDoList() {
-    var list = [
-      "Study for exam",
-      "Go to the gym",
-      "Clean my appartment",
-      "Visit grandparents",
-      "Hang out with friends",
-    ];
-
-    return ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (context, index) => _listItem(list[index]));
-  }
-
-  Widget _listItem(String listItemName) {
-    return Column(
-      children: [
-        ListTile(
-          leading: Checkbox(onChanged: null, value: false),
-          title: Text(listItemName, style: TextStyle(fontSize: 20)),
-          trailing: IconButton(icon: Icon(Icons.close), onPressed: null),
-        ),
-        Divider(
-          color: Colors.grey[900],
-        )
+      actions: <Widget>[
+        PopupMenuButton<String>(onSelected: (String value) {
+          setState(() {
+            filterValue = value;
+          });
+        }, itemBuilder: (BuildContext context) {
+          return choices
+              .map(
+                (choise) => PopupMenuItem(
+                  value: choise,
+                  child: Text(choise),
+                ),
+              )
+              .toList();
+        })
       ],
     );
   }
@@ -72,56 +68,9 @@ class Home extends StatelessWidget {
     return FloatingActionButton(
         child: Icon(Icons.add),
         backgroundColor: Colors.grey[900],
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SecondPage()),
-          );
+        onPressed: () async {
+          await Navigator.push(
+              context, MaterialPageRoute(builder: (context) => SecondView()));
         });
-  }
-}
-
-class SecondPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey[900],
-        title: Text('TODO'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            _textField(),
-            _addButton(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _textField() {
-    return TextField(
-        decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            hintText: "Add something",
-            hintStyle: TextStyle()),
-        onChanged: (text) {});
-  }
-
-  Widget _addButton() {
-    return OutlineButton(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.add),
-          Text('Add'),
-        ],
-      ),
-      borderSide: BorderSide(color: Colors.white),
-      onPressed: () {},
-    );
   }
 }
