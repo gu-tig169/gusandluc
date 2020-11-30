@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../model/model.dart';
 
 class TodoList extends StatefulWidget {
@@ -36,7 +35,12 @@ class _TodoListState extends State<TodoList> {
                     state.updateList(item);
                   });
                 }),
-            title: Text(item.title, style: TextStyle(fontSize: 20)),
+            title: Text(item.title,
+                style: TextStyle(
+                    decoration: item.isDone
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                    fontSize: 20)),
             trailing: IconButton(
                 icon: Icon(Icons.delete),
                 onPressed: () {

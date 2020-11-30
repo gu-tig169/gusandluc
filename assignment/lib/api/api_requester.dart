@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class ApiRequester {
   static final String url =
       'https://todoapp-api-vldfm.ondigitalocean.app/todos/';
-  static final String key = '54a79c2c-44b9-477e-b35b-5e5c747c3133';
+  static final String key = '63835379-458c-400b-873f-839ddf800312';
 
   static Future<List<TodoItem>> fetchTodo() async {
     http.Response response = await http.get(url + "?key=" + key);

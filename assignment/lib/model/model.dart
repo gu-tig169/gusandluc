@@ -1,8 +1,6 @@
 import 'package:assignment/api/api_requester.dart';
 import 'package:flutter/material.dart';
 
-//TodoItem todomodelFromJson(var str) => TodoItem.fromJson(json.decode(str));
-
 class TodoItem {
   String id;
   String title;

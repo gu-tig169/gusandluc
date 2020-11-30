@@ -37,7 +37,7 @@ class _SecondPageState extends State<SecondView> {
         TextField(
           decoration: InputDecoration(
               border: OutlineInputBorder(),
-              hintText: "Add something",
+              hintText: "What are your plans?",
               hintStyle: TextStyle()),
           controller: myController,
         )
